@@ -81,6 +81,7 @@ func (l *Logger) Logf(level hlog.Level, format string, kvs ...interface{}) {
 	}
 }
 
+// CtxLogf log using zerolog logger with specified level, formatting and context
 func (l *Logger) CtxLogf(level hlog.Level, ctx context.Context, format string, kvs ...interface{}) {
 	ctx = l.log.WithContext(ctx)
 	switch level {
@@ -183,12 +184,14 @@ func (l *Logger) CtxFatalf(ctx context.Context, format string, v ...interface{})
 	l.CtxLogf(hlog.LevelFatal, ctx, format, v...)
 }
 
+// SetLevel setting logging level for logger
 func (l *Logger) SetLevel(level hlog.Level) {
 	lvl := MatchHlogLevel(level)
 	l.level = lvl
 	l.log = l.log.Level(lvl)
 }
 
+// SetOutput setting output for logger
 func (l *Logger) SetOutput(writer io.Writer) {
 	l.out = writer
 	l.log = l.log.Output(writer)
