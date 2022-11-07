@@ -1,6 +1,9 @@
 package hertz_contrib_zerolog
 
-import "github.com/rs/zerolog"
+import (
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/rs/zerolog"
+)
 
 type (
 	Options struct {
@@ -11,20 +14,24 @@ type (
 	Setter func(opts *Options)
 )
 
-func newOptions(log zerolog.Logger) *Options {
-
+func newOptions(log zerolog.Logger, setters []Setter) *Options {
 	opts := &Options{
 		context: log.With(),
 		level:   log.GetLevel(),
 	}
 
+	for _, set := range setters {
+		set(opts)
+	}
+
 	return opts
 }
 
-func WithLevel(level zerolog.Level) Setter {
+func WithLevel(level hlog.Level) Setter {
+	lvl := MatchHlogLevel(level)
 	return func(opts *Options) {
-		opts.context = opts.context.Logger().Level(level).With()
-		opts.level = level
+		opts.context = opts.context.Logger().Level(lvl).With()
+		opts.level = lvl
 	}
 }
 
@@ -55,12 +62,6 @@ func WithCaller() Setter {
 func WithCallerWithSkipFrameCount(skipFrameCount int) Setter {
 	return func(opts *Options) {
 		opts.context = opts.context.CallerWithSkipFrameCount(skipFrameCount)
-	}
-}
-
-func WithPrefix(prefix string) Setter {
-	return func(opts *Options) {
-		opts.context = opts.context.Str("prefix", prefix)
 	}
 }
 

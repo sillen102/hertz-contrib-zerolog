@@ -11,32 +11,41 @@ import (
 
 var _ hlog.FullLogger = (*Logger)(nil)
 
+// Logger is a wrapper around `zerolog.Logger` that provides an implementation of `hlog.FullLogger` interface
 type Logger struct {
-	log   zerolog.Logger
-	out   io.Writer
-	level zerolog.Level
+	log     zerolog.Logger
+	out     io.Writer
+	level   zerolog.Level
+	setters []Setter
 }
 
-func NewLogger(out io.Writer, level zerolog.Level) *Logger {
-
+// New returns a new Logger instance
+func New(out io.Writer, setters ...Setter) *Logger {
 	switch l := out.(type) {
 	case zerolog.Logger:
-		return newLogger(l, level)
+		return newLogger(l, setters)
 	default:
-		return newLogger(zerolog.New(out), level)
+		return newLogger(zerolog.New(out), setters)
 	}
 }
 
-func newLogger(log zerolog.Logger, level zerolog.Level) *Logger {
-	opts := newOptions(log)
+// From returns a new Logger instance using existing zerolog log.
+func From(log zerolog.Logger, setters ...Setter) *Logger {
+	return newLogger(log, setters)
+}
+
+func newLogger(log zerolog.Logger, setters []Setter) *Logger {
+	opts := newOptions(log, setters)
 
 	return &Logger{
-		log:   opts.context.Logger(),
-		out:   nil,
-		level: level,
+		log:     opts.context.Logger(),
+		out:     nil,
+		level:   opts.level,
+		setters: setters,
 	}
 }
 
+// Log log using zerolog logger with specified level
 func (l *Logger) Log(level hlog.Level, kvs ...interface{}) {
 	switch level {
 	case hlog.LevelTrace, hlog.LevelDebug:
@@ -54,6 +63,7 @@ func (l *Logger) Log(level hlog.Level, kvs ...interface{}) {
 	}
 }
 
+// Logf log using zerolog logger with specified level and formatting
 func (l *Logger) Logf(level hlog.Level, format string, kvs ...interface{}) {
 	switch level {
 	case hlog.LevelTrace, hlog.LevelDebug:
@@ -146,23 +156,23 @@ func (l *Logger) Fatalf(format string, v ...interface{}) {
 }
 
 func (l *Logger) CtxTracef(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelTrace, ctx, format, v...)
 }
 
 func (l *Logger) CtxDebugf(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelDebug, ctx, format, v...)
 }
 
 func (l *Logger) CtxInfof(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelInfo, ctx, format, v...)
 }
 
 func (l *Logger) CtxNoticef(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelNotice, ctx, format, v...)
 }
 
 func (l *Logger) CtxWarnf(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelWarn, ctx, format, v...)
 }
 
 func (l *Logger) CtxErrorf(ctx context.Context, format string, v ...interface{}) {
@@ -170,28 +180,16 @@ func (l *Logger) CtxErrorf(ctx context.Context, format string, v ...interface{})
 }
 
 func (l *Logger) CtxFatalf(ctx context.Context, format string, v ...interface{}) {
-	l.CtxLogf(hlog.LevelError, ctx, format, v...)
+	l.CtxLogf(hlog.LevelFatal, ctx, format, v...)
 }
 
 func (l *Logger) SetLevel(level hlog.Level) {
-	var lvl zerolog.Level
-	switch level {
-	case hlog.LevelTrace, hlog.LevelDebug:
-		lvl = zerolog.DebugLevel
-	case hlog.LevelInfo:
-		lvl = zerolog.InfoLevel
-	case hlog.LevelWarn, hlog.LevelNotice:
-		lvl = zerolog.WarnLevel
-	case hlog.LevelError:
-		lvl = zerolog.ErrorLevel
-	case hlog.LevelFatal:
-		lvl = zerolog.FatalLevel
-	default:
-		lvl = zerolog.WarnLevel
-	}
-	l.log.Level(lvl)
+	lvl := MatchHlogLevel(level)
+	l.level = lvl
+	l.log = l.log.Level(lvl)
 }
 
 func (l *Logger) SetOutput(writer io.Writer) {
-	l.log.Output(writer)
+	l.out = writer
+	l.log = l.log.Output(writer)
 }
