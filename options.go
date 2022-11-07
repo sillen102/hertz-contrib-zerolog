@@ -59,12 +59,6 @@ func WithCaller() Setter {
 	}
 }
 
-func WithCallerWithSkipFrameCount(skipFrameCount int) Setter {
-	return func(opts *Options) {
-		opts.context = opts.context.CallerWithSkipFrameCount(skipFrameCount)
-	}
-}
-
 func WithHook(hook zerolog.Hook) Setter {
 	return func(opts *Options) {
 		opts.context = opts.context.Logger().Hook(hook).With()

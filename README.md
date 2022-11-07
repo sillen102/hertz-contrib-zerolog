@@ -1,6 +1,9 @@
 # hertz-contrib-zerolog
 [Zerolog](https://github.com/rs/zerolog) wrapper for [Hertz](https://github.com/cloudwego/hertz) web framework.
 
+The wrapper implements the hlog.FullLogger interface using zerolog.
+It contains methods to map between zerolog and hlog log levels and can be created with various options (see options.go).
+
 ## Installation
     go get github.com/sillen102/hertz-contrib-zerolog
 
