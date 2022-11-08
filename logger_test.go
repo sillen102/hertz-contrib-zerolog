@@ -1,14 +1,15 @@
-package hertz_contrib_zerolog
+package hertzZerolog
 
 import (
 	"bytes"
 	"context"
+	"os"
+	"testing"
+
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"testing"
 )
 
 func TestFrom(t *testing.T) {

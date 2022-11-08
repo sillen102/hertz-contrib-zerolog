@@ -1,12 +1,13 @@
-package hertz_contrib_zerolog
+package hertzZerolog
 
 import (
 	"context"
 	"fmt"
+	"io"
+
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"io"
 )
 
 var _ hlog.FullLogger = (*Logger)(nil)
@@ -16,32 +17,32 @@ type Logger struct {
 	log     zerolog.Logger
 	out     io.Writer
 	level   zerolog.Level
-	setters []Setter
+	options []Opt
 }
 
 // New returns a new Logger instance
-func New(out io.Writer, setters ...Setter) *Logger {
+func New(out io.Writer, options ...Opt) *Logger {
 	switch l := out.(type) {
 	case zerolog.Logger:
-		return newLogger(l, setters)
+		return newLogger(l, options)
 	default:
-		return newLogger(zerolog.New(out), setters)
+		return newLogger(zerolog.New(out), options)
 	}
 }
 
 // From returns a new Logger instance using existing zerolog log.
-func From(log zerolog.Logger, setters ...Setter) *Logger {
-	return newLogger(log, setters)
+func From(log zerolog.Logger, options ...Opt) *Logger {
+	return newLogger(log, options)
 }
 
-func newLogger(log zerolog.Logger, setters []Setter) *Logger {
-	opts := newOptions(log, setters)
+func newLogger(log zerolog.Logger, options []Opt) *Logger {
+	opts := newOptions(log, options)
 
 	return &Logger{
 		log:     opts.context.Logger(),
 		out:     nil,
 		level:   opts.level,
-		setters: setters,
+		options: options,
 	}
 }
 

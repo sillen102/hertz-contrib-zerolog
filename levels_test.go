@@ -1,10 +1,11 @@
-package hertz_contrib_zerolog
+package hertzZerolog
 
 import (
+	"testing"
+
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestMatchHlogLevel(t *testing.T) {

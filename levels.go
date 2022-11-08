@@ -1,4 +1,4 @@
-package hertz_contrib_zerolog
+package hertzZerolog
 
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"

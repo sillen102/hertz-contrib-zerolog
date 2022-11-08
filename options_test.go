@@ -1,15 +1,16 @@
-package hertz_contrib_zerolog
+package hertzZerolog
 
 import (
 	"bytes"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/hertz/pkg/common/json"
-	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/common/json"
+	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWithCaller(t *testing.T) {
@@ -155,6 +156,27 @@ func TestWithTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
 
 	l := New(b, WithTimestamp())
+
+	l.Info("foobar")
+
+	type Log struct {
+		Level   string    `json:"level"`
+		Message string    `json:"message"`
+		Time    time.Time `json:"time"`
+	}
+
+	log := &Log{}
+
+	err := json.Unmarshal(b.Bytes(), log)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, log.Time)
+}
+
+func TestWithFormattedTimestamp(t *testing.T) {
+	b := &bytes.Buffer{}
+
+	l := New(b, WithFormattedTimestamp(time.RFC3339Nano))
 
 	l.Info("foobar")
 
