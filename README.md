@@ -5,7 +5,7 @@ The wrapper implements the hlog.FullLogger interface using Zerolog.
 It can be created with various options (see [options](###Options) below).
 
 ## Installation
-    go get github.com/hertz-contrib/logger/zerolog
+    go get github.com/sillen102/hertz-contrib-zerolog
 
 ## Usage
 ### Set hlog logger:
@@ -17,7 +17,7 @@ import (
     "github.com/cloudwego/hertz/pkg/app/server"
     "github.com/cloudwego/hertz/pkg/common/hlog"
 
-    hertzZerolog "github.com/hertz-contrib/logger/zerolog"
+    hertzZerolog "github.com/sillen102/hertz-contrib-zerolog"
 )
 
 func main () {
@@ -45,7 +45,7 @@ import (
     "github.com/cloudwego/hertz/pkg/app/server"
     "github.com/cloudwego/hertz/pkg/common/hlog"
 
-    hertzZerolog "github.com/hertz-contrib/logger/zerolog"
+    hertzZerolog "github.com/sillen102/hertz-contrib-zerolog"
 )
 
 func main () {
