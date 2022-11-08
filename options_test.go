@@ -3,6 +3,7 @@ package hertzZerolog
 import (
 	"bytes"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -173,23 +174,57 @@ func TestWithTimestamp(t *testing.T) {
 	assert.NotEmpty(t, log.Time)
 }
 
+type Log struct {
+	Level   string    `json:"level"`
+	Message string    `json:"message"`
+	Time    time.Time `json:"time"`
+}
+
+type LogOutput struct {
+	Level   string `json:"level"`
+	Time    string `json:"time"`
+	Message string `json:"message"`
+}
+
 func TestWithFormattedTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
 
+	// Test with time.RFC3339Nano
 	l := New(b, WithFormattedTimestamp(time.RFC3339Nano))
 
 	l.Info("foobar")
 
-	type Log struct {
-		Level   string    `json:"level"`
-		Message string    `json:"message"`
-		Time    time.Time `json:"time"`
-	}
-
 	log := &Log{}
-
 	err := json.Unmarshal(b.Bytes(), log)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, log.Time)
+
+	var output LogOutput
+	err = json.Unmarshal(b.Bytes(), &output)
+	assert.NoError(t, err)
+	assert.Regexp(
+		t,
+		regexp.MustCompile(`^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{6}\+[0-9]{2}:[0-9]{2}`),
+		output.Time,
+	)
+
+	// Test with time.RFC3339
+	b.Reset()
+	l = New(b, WithFormattedTimestamp(time.RFC3339))
+	l.Info("foobar")
+
+	log = &Log{}
+	err = json.Unmarshal(b.Bytes(), log)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, log.Time)
+
+	err = json.Unmarshal(b.Bytes(), &output)
+	assert.NoError(t, err)
+	assert.Regexp(
+		t,
+		regexp.MustCompile(`^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\+[0-9]{2}:[0-9]{2}`),
+		output.Time,
+	)
 }
