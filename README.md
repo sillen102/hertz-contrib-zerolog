@@ -23,9 +23,7 @@ import (
 func main () {
     h := server.Default()
 	
-    hlog.SetLogger(hertzZerolog.New(
-        os.Stdout,
-        hertzZerolog.WithLevel(hlog.LevelWarn)))
+    hlog.SetLogger(hertzZerolog.New())
 
     h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
         hlog.Info("test log")
@@ -52,7 +50,7 @@ func main () {
     h := server.Default()
 	
     hlog.SetLogger(hertzZerolog.New(
-        os.Stdout, // allows to specify output
+        hertzZerolog.WithOutput(os.Stdout), // allows to specify output
         hertzZerolog.WithLevel(hlog.LevelWarn), // option with log level
 	hertzZerolog.WithTimestamp(), // option with timestamp
 	hertzZerolog.WithCaller())) // option with caller
