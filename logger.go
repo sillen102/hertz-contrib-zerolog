@@ -8,7 +8,6 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 var _ hlog.FullLogger = (*Logger)(nil)
@@ -101,17 +100,17 @@ func (l *Logger) CtxLogf(level hlog.Level, ctx context.Context, format string, k
 	ctx = l.log.WithContext(ctx)
 	switch level {
 	case hlog.LevelTrace, hlog.LevelDebug:
-		log.Ctx(ctx).Debug().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Debug().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelInfo:
-		log.Ctx(ctx).Info().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Info().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelNotice, hlog.LevelWarn:
-		log.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelError:
-		log.Ctx(ctx).Error().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Error().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelFatal:
-		log.Ctx(ctx).Fatal().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Fatal().Msg(fmt.Sprintf(format, kvs...))
 	default:
-		log.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
+		zerolog.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
 	}
 }
 
