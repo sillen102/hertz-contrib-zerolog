@@ -36,6 +36,21 @@ func TestUnwrap(t *testing.T) {
 	assert.IsType(t, &zerolog.Logger{}, logger)
 }
 
+func TestWithContext(t *testing.T) {
+	b := &bytes.Buffer{}
+	l := New()
+	l.SetOutput(b)
+	ctx := l.WithContext(context.Background())
+
+	l.CtxTracef(ctx, "foo%s", "bar")
+	assert.Equal(
+		t,
+		`{"level":"debug","message":"foobar"}
+`,
+		b.String(),
+	)
+}
+
 func TestLog(t *testing.T) {
 	b := &bytes.Buffer{}
 	l := New()

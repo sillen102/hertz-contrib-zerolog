@@ -48,6 +48,11 @@ func (l *Logger) Unwrap() *zerolog.Logger {
 	return &l.log
 }
 
+// WithContext returns a context with logger associated with it
+func (l *Logger) WithContext(ctx context.Context) context.Context {
+	return l.log.WithContext(ctx)
+}
+
 func newLogger(log zerolog.Logger, options []Opt) *Logger {
 	opts := newOptions(log, options)
 
