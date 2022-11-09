@@ -8,7 +8,7 @@ It can be created with various options (see [options](###Options) below).
     go get github.com/sillen102/hertz-contrib-zerolog
 
 ## Usage
-### Set hlog logger:
+### Simple example:
 ```go
 import (
     "github.com/cloudwego/hertz/pkg/app"
@@ -21,7 +21,7 @@ import (
 func main () {
     h := server.Default()
 	
-    hlog.SetLogger(hertzZerolog.New())
+    hlog.SetLogger(hertzZerolog.New()) // set the Hertz logger
 
     h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
         hlog.Info("test log")
@@ -49,9 +49,9 @@ func main () {
 	
     hlog.SetLogger(hertzZerolog.New(
         hertzZerolog.WithOutput(os.Stdout), // allows to specify output
-        hertzZerolog.WithLevel(hlog.LevelWarn), // option with log level
-	hertzZerolog.WithTimestamp(), // option with timestamp
-	hertzZerolog.WithCaller())) // option with caller
+        hertzZerolog.WithLevel(hlog.LevelWarn), // allows to specify log level
+	hertzZerolog.WithTimestamp(), // option to add timestamp
+	hertzZerolog.WithCaller())) // option to add caller
 
     h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
         hlog.Info("test log")
