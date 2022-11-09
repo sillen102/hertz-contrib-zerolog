@@ -169,6 +169,12 @@ func TestWithLevel(t *testing.T) {
 `)
 }
 
+type Log struct {
+	Level   string    `json:"level"`
+	Message string    `json:"message"`
+	Time    time.Time `json:"time"`
+}
+
 func TestWithTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
 	l := New(WithTimestamp())
@@ -176,24 +182,12 @@ func TestWithTimestamp(t *testing.T) {
 
 	l.Info("foobar")
 
-	type Log struct {
-		Level   string    `json:"level"`
-		Message string    `json:"message"`
-		Time    time.Time `json:"time"`
-	}
-
 	log := &Log{}
 
 	err := json.Unmarshal(b.Bytes(), log)
 
 	assert.NoError(t, err)
 	assert.NotEmpty(t, log.Time)
-}
-
-type Log struct {
-	Level   string    `json:"level"`
-	Message string    `json:"message"`
-	Time    time.Time `json:"time"`
 }
 
 func TestWithFormattedTimestamp(t *testing.T) {
