@@ -13,6 +13,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestWithOutput(t *testing.T) {
+	b := &bytes.Buffer{}
+	l := New(WithOutput(b))
+
+	l.Info("foobar")
+
+	assert.Equal(
+		t,
+		`{"level":"info","message":"foobar"}
+`,
+		b.String(),
+	)
+}
+
 func TestWithCaller(t *testing.T) {
 	b := &bytes.Buffer{}
 	l := New(WithCaller())

@@ -3,6 +3,7 @@ package zerolog
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
+	"io"
 )
 
 type (
@@ -25,6 +26,12 @@ func newOptions(log zerolog.Logger, options []Opt) *Options {
 	}
 
 	return opts
+}
+
+func WithOutput(out io.Writer) Opt {
+	return func(opts *Options) {
+		opts.context = opts.context.Logger().Output(out).With()
+	}
 }
 
 func WithLevel(level hlog.Level) Opt {
