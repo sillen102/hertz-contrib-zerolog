@@ -1,9 +1,10 @@
 package zerolog
 
 import (
+	"io"
+
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
-	"io"
 )
 
 type (
