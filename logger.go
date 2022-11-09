@@ -1,9 +1,10 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"context"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/rs/zerolog"
@@ -21,18 +22,26 @@ type Logger struct {
 }
 
 // New returns a new Logger instance
-func New(out io.Writer, options ...Opt) *Logger {
-	switch l := out.(type) {
-	case zerolog.Logger:
-		return newLogger(l, options)
-	default:
-		return newLogger(zerolog.New(out), options)
-	}
+func New(options ...Opt) *Logger {
+	return newLogger(zerolog.New(os.Stdout), options)
 }
 
 // From returns a new Logger instance using existing zerolog log.
 func From(log zerolog.Logger, options ...Opt) *Logger {
 	return newLogger(log, options)
+}
+
+// SetLevel setting logging level for logger
+func (l *Logger) SetLevel(level hlog.Level) {
+	lvl := matchHlogLevel(level)
+	l.level = lvl
+	l.log = l.log.Level(lvl)
+}
+
+// SetOutput setting output for logger
+func (l *Logger) SetOutput(writer io.Writer) {
+	l.out = writer
+	l.log = l.log.Output(writer)
 }
 
 func newLogger(log zerolog.Logger, options []Opt) *Logger {
@@ -183,17 +192,4 @@ func (l *Logger) CtxErrorf(ctx context.Context, format string, v ...interface{})
 
 func (l *Logger) CtxFatalf(ctx context.Context, format string, v ...interface{}) {
 	l.CtxLogf(hlog.LevelFatal, ctx, format, v...)
-}
-
-// SetLevel setting logging level for logger
-func (l *Logger) SetLevel(level hlog.Level) {
-	lvl := MatchHlogLevel(level)
-	l.level = lvl
-	l.log = l.log.Level(lvl)
-}
-
-// SetOutput setting output for logger
-func (l *Logger) SetOutput(writer io.Writer) {
-	l.out = writer
-	l.log = l.log.Output(writer)
 }

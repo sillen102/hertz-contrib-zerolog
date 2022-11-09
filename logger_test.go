@@ -1,9 +1,8 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"bytes"
 	"context"
-	"os"
 	"testing"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -30,7 +29,8 @@ func TestFrom(t *testing.T) {
 
 func TestLog(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.Trace("foo")
 	assert.Equal(
@@ -88,7 +88,8 @@ func TestLog(t *testing.T) {
 
 func TestLogf(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.Tracef("foo%s", "bar")
 	assert.Equal(
@@ -147,7 +148,8 @@ func TestLogf(t *testing.T) {
 func TestCtxTracef(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxTracef(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -162,7 +164,8 @@ func TestCtxTracef(t *testing.T) {
 func TestCtxDebugf(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxDebugf(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -177,7 +180,8 @@ func TestCtxDebugf(t *testing.T) {
 func TestCtxInfof(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxInfof(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -192,7 +196,8 @@ func TestCtxInfof(t *testing.T) {
 func TestCtxNoticef(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxNoticef(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -207,7 +212,8 @@ func TestCtxNoticef(t *testing.T) {
 func TestCtxWarnf(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxWarnf(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -222,7 +228,8 @@ func TestCtxWarnf(t *testing.T) {
 func TestCtxErrorf(t *testing.T) {
 	ctx := context.Background()
 	b := &bytes.Buffer{}
-	l := New(b)
+	l := New()
+	l.SetOutput(b)
 
 	l.CtxErrorf(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -235,7 +242,7 @@ func TestCtxErrorf(t *testing.T) {
 }
 
 func TestSetLevel(t *testing.T) {
-	l := New(os.Stdout)
+	l := New()
 
 	l.SetLevel(hlog.LevelDebug)
 	assert.Equal(t, l.log.GetLevel(), zerolog.DebugLevel)
@@ -245,28 +252,4 @@ func TestSetLevel(t *testing.T) {
 
 	l.SetLevel(hlog.LevelError)
 	assert.Equal(t, l.log.GetLevel(), zerolog.ErrorLevel)
-}
-
-func TestSetOutput(t *testing.T) {
-	b1 := &bytes.Buffer{}
-	l := New(os.Stdout)
-	l.SetOutput(b1)
-
-	l.Info("foo")
-	assert.Equal(
-		t,
-		`{"level":"info","message":"foo"}
-`,
-		b1.String(),
-	)
-
-	b2 := &bytes.Buffer{}
-	l.SetOutput(b2)
-	l.Debug("bar")
-	assert.Equal(
-		t,
-		`{"level":"debug","message":"bar"}
-`,
-		b2.String(),
-	)
 }

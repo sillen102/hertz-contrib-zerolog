@@ -1,4 +1,4 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -28,7 +28,7 @@ func newOptions(log zerolog.Logger, options []Opt) *Options {
 }
 
 func WithLevel(level hlog.Level) Opt {
-	lvl := MatchHlogLevel(level)
+	lvl := matchHlogLevel(level)
 	return func(opts *Options) {
 		opts.context = opts.context.Logger().Level(lvl).With()
 		opts.level = lvl

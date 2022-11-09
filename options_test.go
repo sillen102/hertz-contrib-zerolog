@@ -1,4 +1,4 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"bytes"
@@ -15,8 +15,8 @@ import (
 
 func TestWithCaller(t *testing.T) {
 	b := &bytes.Buffer{}
-
-	l := New(b, WithCaller())
+	l := New(WithCaller())
+	l.SetOutput(b)
 
 	l.Info("foobar")
 
@@ -40,8 +40,8 @@ func TestWithCaller(t *testing.T) {
 
 func TestWithField(t *testing.T) {
 	b := &bytes.Buffer{}
-
-	l := New(b, WithField("service", "logging"))
+	l := New(WithField("service", "logging"))
+	l.SetOutput(b)
 
 	l.Info("foobar")
 
@@ -61,11 +61,11 @@ func TestWithField(t *testing.T) {
 
 func TestWithFields(t *testing.T) {
 	b := &bytes.Buffer{}
-
-	l := New(b, WithFields(map[string]interface{}{
+	l := New(WithFields(map[string]interface{}{
 		"host": "localhost",
 		"port": 8080,
 	}))
+	l.SetOutput(b)
 
 	l.Info("foobar")
 
@@ -106,7 +106,8 @@ func (h *Hook) Run(e *zerolog.Event, level zerolog.Level, message string) {
 func TestWithHook(t *testing.T) {
 	b := &bytes.Buffer{}
 	h := &Hook{}
-	l := New(b, WithHook(h))
+	l := New(WithHook(h))
+	l.SetOutput(b)
 
 	l.Info("Foo")
 	l.Warn("Bar")
@@ -121,12 +122,13 @@ func TestWithHook(t *testing.T) {
 func TestWithHookFunc(t *testing.T) {
 	b := &bytes.Buffer{}
 	logs := make([]HookLog, 0, 2)
-	l := New(b, WithHookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
+	l := New(WithHookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
 		logs = append(logs, HookLog{
 			level:   level,
 			message: message,
 		})
 	}))
+	l.SetOutput(b)
 
 	l.Info("Foo")
 	l.Warn("Bar")
@@ -140,7 +142,8 @@ func TestWithHookFunc(t *testing.T) {
 
 func TestWithLevel(t *testing.T) {
 	b := &bytes.Buffer{}
-	l := New(b, WithLevel(hlog.LevelInfo))
+	l := New(WithLevel(hlog.LevelInfo))
+	l.SetOutput(b)
 
 	l.Debug("Test")
 
@@ -154,8 +157,8 @@ func TestWithLevel(t *testing.T) {
 
 func TestWithTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
-
-	l := New(b, WithTimestamp())
+	l := New(WithTimestamp())
+	l.SetOutput(b)
 
 	l.Info("foobar")
 
@@ -181,8 +184,8 @@ type Log struct {
 
 func TestWithFormattedTimestamp(t *testing.T) {
 	b := &bytes.Buffer{}
-
-	l := New(b, WithFormattedTimestamp(time.RFC3339Nano))
+	l := New(WithFormattedTimestamp(time.RFC3339Nano))
+	l.SetOutput(b)
 
 	l.Info("foobar")
 

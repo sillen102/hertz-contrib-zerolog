@@ -1,4 +1,4 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"testing"
@@ -9,19 +9,19 @@ import (
 )
 
 func TestMatchHlogLevel(t *testing.T) {
-	assert.Equal(t, zerolog.TraceLevel, MatchHlogLevel(hlog.LevelTrace))
-	assert.Equal(t, zerolog.DebugLevel, MatchHlogLevel(hlog.LevelDebug))
-	assert.Equal(t, zerolog.InfoLevel, MatchHlogLevel(hlog.LevelInfo))
-	assert.Equal(t, zerolog.WarnLevel, MatchHlogLevel(hlog.LevelWarn))
-	assert.Equal(t, zerolog.ErrorLevel, MatchHlogLevel(hlog.LevelError))
-	assert.Equal(t, zerolog.FatalLevel, MatchHlogLevel(hlog.LevelFatal))
+	assert.Equal(t, zerolog.TraceLevel, matchHlogLevel(hlog.LevelTrace))
+	assert.Equal(t, zerolog.DebugLevel, matchHlogLevel(hlog.LevelDebug))
+	assert.Equal(t, zerolog.InfoLevel, matchHlogLevel(hlog.LevelInfo))
+	assert.Equal(t, zerolog.WarnLevel, matchHlogLevel(hlog.LevelWarn))
+	assert.Equal(t, zerolog.ErrorLevel, matchHlogLevel(hlog.LevelError))
+	assert.Equal(t, zerolog.FatalLevel, matchHlogLevel(hlog.LevelFatal))
 }
 
 func TestMatchZerologLevel(t *testing.T) {
-	assert.Equal(t, hlog.LevelTrace, MatchZerologLevel(zerolog.TraceLevel))
-	assert.Equal(t, hlog.LevelDebug, MatchZerologLevel(zerolog.DebugLevel))
-	assert.Equal(t, hlog.LevelInfo, MatchZerologLevel(zerolog.InfoLevel))
-	assert.Equal(t, hlog.LevelWarn, MatchZerologLevel(zerolog.WarnLevel))
-	assert.Equal(t, hlog.LevelError, MatchZerologLevel(zerolog.ErrorLevel))
-	assert.Equal(t, hlog.LevelFatal, MatchZerologLevel(zerolog.FatalLevel))
+	assert.Equal(t, hlog.LevelTrace, matchZerologLevel(zerolog.TraceLevel))
+	assert.Equal(t, hlog.LevelDebug, matchZerologLevel(zerolog.DebugLevel))
+	assert.Equal(t, hlog.LevelInfo, matchZerologLevel(zerolog.InfoLevel))
+	assert.Equal(t, hlog.LevelWarn, matchZerologLevel(zerolog.WarnLevel))
+	assert.Equal(t, hlog.LevelError, matchZerologLevel(zerolog.ErrorLevel))
+	assert.Equal(t, hlog.LevelFatal, matchZerologLevel(zerolog.FatalLevel))
 }

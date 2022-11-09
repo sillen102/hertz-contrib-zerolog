@@ -1,4 +1,4 @@
-package hertzZerolog
+package zerolog
 
 import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -26,8 +26,8 @@ var (
 	}
 )
 
-// MatchHlogLevel map hlog.Level to zerolog.Level
-func MatchHlogLevel(level hlog.Level) zerolog.Level {
+// matchHlogLevel map hlog.Level to zerolog.Level
+func matchHlogLevel(level hlog.Level) zerolog.Level {
 	zlvl, found := zerologLevels[level]
 
 	if found {
@@ -37,8 +37,8 @@ func MatchHlogLevel(level hlog.Level) zerolog.Level {
 	return zerolog.WarnLevel // Default level
 }
 
-// MatchZerologLevel map zerolog.Level to hlog.Level
-func MatchZerologLevel(level zerolog.Level) hlog.Level {
+// matchZerologLevel map zerolog.Level to hlog.Level
+func matchZerologLevel(level zerolog.Level) hlog.Level {
 	hlvl, found := hlogLevels[level]
 
 	if found {
