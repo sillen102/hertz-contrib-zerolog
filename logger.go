@@ -97,7 +97,6 @@ func (l *Logger) Logf(level hlog.Level, format string, kvs ...interface{}) {
 
 // CtxLogf log using zerolog logger with specified level, formatting and context
 func (l *Logger) CtxLogf(level hlog.Level, ctx context.Context, format string, kvs ...interface{}) {
-	ctx = l.log.WithContext(ctx)
 	switch level {
 	case hlog.LevelTrace, hlog.LevelDebug:
 		zerolog.Ctx(ctx).Debug().Msg(fmt.Sprintf(format, kvs...))
