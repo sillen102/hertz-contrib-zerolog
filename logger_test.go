@@ -14,8 +14,8 @@ import (
 func TestFrom(t *testing.T) {
 	b := &bytes.Buffer{}
 
-	zl := zerolog.New(b)
-	l := From(zl.With().Str("key", "test").Logger())
+	zl := zerolog.New(b).With().Str("key", "test").Logger()
+	l := From(&zl)
 
 	l.Info("foo")
 
