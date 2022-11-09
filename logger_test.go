@@ -155,10 +155,10 @@ func TestLogf(t *testing.T) {
 }
 
 func TestCtxTracef(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxTracef(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -171,10 +171,10 @@ func TestCtxTracef(t *testing.T) {
 }
 
 func TestCtxDebugf(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxDebugf(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -187,10 +187,10 @@ func TestCtxDebugf(t *testing.T) {
 }
 
 func TestCtxInfof(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxInfof(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -203,10 +203,10 @@ func TestCtxInfof(t *testing.T) {
 }
 
 func TestCtxNoticef(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxNoticef(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -219,10 +219,10 @@ func TestCtxNoticef(t *testing.T) {
 }
 
 func TestCtxWarnf(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxWarnf(ctx, "foo%s", "bar")
 	assert.Equal(
@@ -235,10 +235,10 @@ func TestCtxWarnf(t *testing.T) {
 }
 
 func TestCtxErrorf(t *testing.T) {
-	ctx := context.Background()
 	b := &bytes.Buffer{}
 	l := New()
 	l.SetOutput(b)
+	ctx := l.log.WithContext(context.Background())
 
 	l.CtxErrorf(ctx, "foo%s", "bar")
 	assert.Equal(

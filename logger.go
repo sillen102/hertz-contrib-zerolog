@@ -95,21 +95,22 @@ func (l *Logger) Logf(level hlog.Level, format string, kvs ...interface{}) {
 	}
 }
 
-// CtxLogf log using zerolog logger with specified level, formatting and context
+// CtxLogf log with logger associated with context
 func (l *Logger) CtxLogf(level hlog.Level, ctx context.Context, format string, kvs ...interface{}) {
+	logger := zerolog.Ctx(ctx)
 	switch level {
 	case hlog.LevelTrace, hlog.LevelDebug:
-		zerolog.Ctx(ctx).Debug().Msg(fmt.Sprintf(format, kvs...))
+		logger.Debug().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelInfo:
-		zerolog.Ctx(ctx).Info().Msg(fmt.Sprintf(format, kvs...))
+		logger.Info().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelNotice, hlog.LevelWarn:
-		zerolog.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
+		logger.Warn().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelError:
-		zerolog.Ctx(ctx).Error().Msg(fmt.Sprintf(format, kvs...))
+		logger.Error().Msg(fmt.Sprintf(format, kvs...))
 	case hlog.LevelFatal:
-		zerolog.Ctx(ctx).Fatal().Msg(fmt.Sprintf(format, kvs...))
+		logger.Fatal().Msg(fmt.Sprintf(format, kvs...))
 	default:
-		zerolog.Ctx(ctx).Warn().Msg(fmt.Sprintf(format, kvs...))
+		logger.Warn().Msg(fmt.Sprintf(format, kvs...))
 	}
 }
 
