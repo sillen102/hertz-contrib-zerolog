@@ -11,8 +11,6 @@ It can be created with various options (see [options](###Options) below).
 ### Set hlog logger:
 ```go
 import (
-    "os"
-	
     "github.com/cloudwego/hertz/pkg/app"
     "github.com/cloudwego/hertz/pkg/app/server"
     "github.com/cloudwego/hertz/pkg/common/hlog"
