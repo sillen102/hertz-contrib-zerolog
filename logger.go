@@ -44,6 +44,11 @@ func (l *Logger) SetOutput(writer io.Writer) {
 	l.log = l.log.Output(writer)
 }
 
+// Unwrap returns the underlying zerolog logger
+func (l *Logger) Unwrap() *zerolog.Logger {
+	return &l.log
+}
+
 func newLogger(log zerolog.Logger, options []Opt) *Logger {
 	opts := newOptions(log, options)
 

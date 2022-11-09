@@ -27,6 +27,15 @@ func TestFrom(t *testing.T) {
 	)
 }
 
+func TestUnwrap(t *testing.T) {
+	l := New()
+
+	logger := l.Unwrap()
+
+	assert.NotNil(t, logger)
+	assert.IsType(t, &zerolog.Logger{}, logger)
+}
+
 func TestLog(t *testing.T) {
 	b := &bytes.Buffer{}
 	l := New()
