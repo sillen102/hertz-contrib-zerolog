@@ -49,7 +49,7 @@ func TestWithCaller(t *testing.T) {
 	segments := strings.Split(log.Caller, ":")
 	filePath := filepath.Base(segments[0])
 
-	assert.Equal(t, filePath, "logger.go")
+	assert.Equal(t, "logger.go", filePath)
 }
 
 func TestWithField(t *testing.T) {
@@ -70,7 +70,7 @@ func TestWithField(t *testing.T) {
 	err := json.Unmarshal(b.Bytes(), log)
 
 	assert.NoError(t, err)
-	assert.Equal(t, log.Service, "logging")
+	assert.Equal(t, "logging", log.Service)
 }
 
 func TestWithFields(t *testing.T) {
@@ -95,8 +95,8 @@ func TestWithFields(t *testing.T) {
 	err := json.Unmarshal(b.Bytes(), log)
 
 	assert.NoError(t, err)
-	assert.Equal(t, log.Host, "localhost")
-	assert.Equal(t, log.Port, 8080)
+	assert.Equal(t, "localhost", log.Host)
+	assert.Equal(t, 8080, log.Port)
 }
 
 type (
@@ -127,10 +127,10 @@ func TestWithHook(t *testing.T) {
 	l.Warn("Bar")
 
 	assert.Len(t, h.logs, 2)
-	assert.Equal(t, h.logs[0].level, zerolog.InfoLevel)
-	assert.Equal(t, h.logs[0].message, "Foo")
-	assert.Equal(t, h.logs[1].level, zerolog.WarnLevel)
-	assert.Equal(t, h.logs[1].message, "Bar")
+	assert.Equal(t, zerolog.InfoLevel, h.logs[0].level)
+	assert.Equal(t, "Foo", h.logs[0].message)
+	assert.Equal(t, zerolog.WarnLevel, h.logs[1].level)
+	assert.Equal(t, "Bar", h.logs[1].message)
 }
 
 func TestWithHookFunc(t *testing.T) {
@@ -148,10 +148,10 @@ func TestWithHookFunc(t *testing.T) {
 	l.Warn("Bar")
 
 	assert.Len(t, logs, 2)
-	assert.Equal(t, logs[0].level, zerolog.InfoLevel)
-	assert.Equal(t, logs[0].message, "Foo")
-	assert.Equal(t, logs[1].level, zerolog.WarnLevel)
-	assert.Equal(t, logs[1].message, "Bar")
+	assert.Equal(t, zerolog.InfoLevel, logs[0].level)
+	assert.Equal(t, "Foo", logs[0].message)
+	assert.Equal(t, zerolog.WarnLevel, logs[1].level)
+	assert.Equal(t, "Bar", logs[1].message)
 }
 
 func TestWithLevel(t *testing.T) {
@@ -165,8 +165,8 @@ func TestWithLevel(t *testing.T) {
 
 	l.Info("foobar")
 
-	assert.Equal(t, b.String(), `{"level":"info","message":"foobar"}
-`)
+	assert.Equal(t, `{"level":"info","message":"foobar"}
+`, b.String())
 }
 
 type Log struct {

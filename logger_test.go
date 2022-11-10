@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/common/json"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
@@ -25,6 +26,45 @@ func TestFrom(t *testing.T) {
 `,
 		b.String(),
 	)
+}
+
+func TestGetLogger(t *testing.T) {
+	hlog.SetLogger(New())
+	logger := GetLogger()
+
+	assert.IsType(t, &Logger{}, logger)
+}
+
+func TestWithContext(t *testing.T) {
+	ctx := context.Background()
+	l := New()
+	c := l.WithContext(ctx)
+
+	assert.NotNil(t, c)
+	assert.IsType(t, zerolog.Ctx(c), &zerolog.Logger{})
+}
+
+func TestLoggerWithField(t *testing.T) {
+	b := &bytes.Buffer{}
+	l := New()
+	l.SetOutput(b)
+	l.WithField("service", "logging")
+
+	l.Info("foobar")
+
+	type Log struct {
+		Level   string `json:"level"`
+		Service string `json:"service"`
+		Message string `json:"message"`
+	}
+
+	log := &Log{}
+
+	err := json.Unmarshal(b.Bytes(), log)
+
+	println(b.String())
+	assert.NoError(t, err)
+	assert.Equal(t, "logging", log.Service)
 }
 
 func TestUnwrap(t *testing.T) {
