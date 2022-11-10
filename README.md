@@ -5,11 +5,15 @@ This is a logger library that uses zerolog to implement the [Hertz logger interf
 
 #### Download and install it:
 
-```go get github.com/sillen102/hertz-contrib-zerolog```
+```
+go get github.com/sillen102/hertz-contrib-zerolog
+```
 
 #### Import it in your code:
 
-```import hertzZerolog "github.com/sillen102/hertz-contrib-zerolog"```
+```
+import hertzZerolog "github.com/sillen102/hertz-contrib-zerolog"
+```
 
 #### Simple example:
 ```go
@@ -120,7 +124,7 @@ func LoggerMiddleware() app.HandlerFunc {
         start := time.Now()
         
         reqId := ctx.Request.Header.Get(RequestIDHeaderValue)
-            if reqId == "" {
+        if reqId == "" {
             reqId = c.Value(RequestIDHeaderValue).(string)
         }
         
