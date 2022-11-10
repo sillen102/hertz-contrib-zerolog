@@ -97,3 +97,56 @@ func main () {
     h.Spin()
 }
 ```
+
+## Advanced usage
+
+#### Implementing a request logging middleware:
+```go
+import (
+    "context"
+    "time"
+    
+    "github.com/cloudwego/hertz/pkg/app"
+
+    hertzZerolog "github.com/sillen102/hertz-contrib-zerolog"
+)
+
+// RequestIDHeaderValue value for the request id header
+const RequestIDHeaderValue = "X-Request-Id"
+
+// LoggerMiddleware middleware for logging incoming requests
+func LoggerMiddleware() app.HandlerFunc {
+    return func(c context.Context, ctx *app.RequestContext) {
+        start := time.Now()
+        
+        reqId := ctx.Request.Header.Get(RequestIDHeaderValue)
+            if reqId == "" {
+            reqId = c.Value(RequestIDHeaderValue).(string)
+        }
+        
+        logger := hertzZerolog.GetLogger()
+        
+        if reqId != "" {
+            logger = logger.WithField("request_id", reqId)
+        }
+        
+        c = logger.WithContext(c)
+        
+        defer func() {
+            stop := time.Now()
+            
+            logger.Unwrap().Info().
+                Str("remote_ip", ctx.ClientIP()).
+                Str("method", string(ctx.Method())).
+                Str("path", string(ctx.Path())).
+                Str("user_agent", string(ctx.UserAgent())).
+                Int("status", ctx.Response.StatusCode()).
+                Dur("latency", stop.Sub(start)).
+                Str("latency_human", stop.Sub(start).String()).
+                Msg("request processed")
+        }()
+        
+        ctx.Next(c)
+    }
+}
+```
