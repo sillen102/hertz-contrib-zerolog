@@ -1,0 +1,13 @@
+name: Semantic release
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+  merge:
+    branches:
+      - master
+  steps:
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v3
