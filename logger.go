@@ -26,8 +26,8 @@ func New(options ...Opt) *Logger {
 }
 
 // From returns a new Logger instance using existing zerolog log.
-func From(log *zerolog.Logger, options ...Opt) *Logger {
-	return newLogger(*log, options)
+func From(log zerolog.Logger, options ...Opt) *Logger {
+	return newLogger(log, options)
 }
 
 // SetLevel setting logging level for logger
