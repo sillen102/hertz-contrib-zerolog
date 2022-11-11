@@ -1,3 +1,7 @@
+# Notice
+
+This code has been merged into the [official hertz-contrib repository](https://github.com/hertz-contrib/logger) and will no longer be maintained here.
+
 # hertz-contrib-zerolog
 This is a logger library that uses zerolog to implement the [Hertz logger interface](https://www.cloudwego.io/docs/hertz/tutorials/framework-exten/log/)
 
